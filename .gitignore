@@ -1,0 +1,7 @@
+/target
+Cargo.lock
+.direnv
+.pre-commit-config.yaml
+*.DS_Store
+.claude
+.hm/node_modules

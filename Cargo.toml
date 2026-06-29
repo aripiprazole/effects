@@ -1,0 +1,17 @@
+[package]
+name = "effects"
+version =  "0.0.1"
+authors = ["Gabrielle Oliveira <you@gabx.io>"]
+description = "Algebraic effects on Nighly Rust"
+repository = "https://github.com/aripiprazole/naloxone"
+keywords = ["coroutines"]
+categories = ["Development tools"]
+edition = "2024"
+license = "MIT"
+
+[workspace]
+members = ["macros"]
+resolver = "2"
+
+[dependencies]
+effects_macros = { path = "./macros", version = "0.0.1" }
