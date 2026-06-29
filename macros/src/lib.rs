@@ -37,20 +37,20 @@ impl ToTokens for ResumeEnum {
 
         tokens.extend(quote! {
             #[allow(non_camel_case_types)]
-            trait #trait_name: ::naloxone_frame::Effect {
-                fn extract(r: #enum_name) -> <Self as ::naloxone_frame::Effect>::Resume;
+            trait #trait_name: ::effects::Effect {
+                fn extract(r: #enum_name) -> <Self as ::effects::Effect>::Resume;
             }
         });
 
         for (i, entry) in self.1.iter().enumerate() {
             let variant = variant_name(entry).unwrap_or(format_ident!("Resume{i}"));
-            let resume_ty: Type = parse_quote!(<#entry as ::naloxone_frame::Effect>::Resume);
+            let resume_ty: Type = parse_quote!(<#entry as ::effects::Effect>::Resume);
             entries.push(quote! {
                 #variant(#resume_ty)
             });
             tokens.extend(quote! {
                 impl #trait_name for #entry {
-                    fn extract(r: #enum_name) -> <Self as ::naloxone_frame::Effect>::Resume {
+                    fn extract(r: #enum_name) -> <Self as ::effects::Effect>::Resume {
                         match r {
                             #enum_name::#variant(v) => v,
                             _ => ::core::panic!("yield!: handler returned the wrong effect variant"),
@@ -165,7 +165,7 @@ impl VisitMut for YieldFolder {
                     let ref resume_type = self.resume_type;
                     let ref extract_trait = self.extract_trait;
                     *node = parse_quote!({
-                        fn eqv<E>(eff: E) -> (#yield_type, impl FnOnce(#resume_type) -> <E as ::naloxone_frame::Effect>::Resume)
+                        fn eqv<E>(eff: E) -> (#yield_type, impl FnOnce(#resume_type) -> <E as ::effects::Effect>::Resume)
                         where E: #extract_trait,
                               E: ::core::convert::Into<#yield_type> {
                             (::core::convert::Into::into(eff), |output| E::extract(output))
@@ -185,7 +185,7 @@ impl VisitMut for YieldFolder {
                 let ref resume_type = self.resume_type;
                 let ref extract_trait = self.extract_trait;
                 *node = parse_quote!({
-                    fn eqv<E>(eff: E) -> (#yield_type, impl FnOnce(#resume_type) -> <E as ::naloxone_frame::Effect>::Resume)
+                    fn eqv<E>(eff: E) -> (#yield_type, impl FnOnce(#resume_type) -> <E as ::effects::Effect>::Resume)
                     where E: #extract_trait,
                           E: ::core::convert::Into<#yield_type> {
                         (::core::convert::Into::into(eff), |output| E::extract(output))

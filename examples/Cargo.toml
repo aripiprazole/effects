@@ -1,5 +1,5 @@
 [package]
-name = "effects"
+name = "effects_examples"
 version =  "0.0.1"
 authors = ["Gabrielle Oliveira <you@gabx.io>"]
 description = "Algebraic effects on Nighly Rust"
@@ -9,9 +9,5 @@ categories = ["Development tools"]
 edition = "2024"
 license = "MIT"
 
-[workspace]
-members = ["macros", "examples"]
-resolver = "2"
-
 [dependencies]
-effects_macros = { path = "./macros", version = "0.0.1" }
+effects = { path = "../" }
